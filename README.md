@@ -12,7 +12,7 @@ Essa é uma pequena aplicação web onde o usuário pode registrar suas despesas
 
 ## Objetivo do projeto :dart:
 
-Meu objetivo ao desenvolver este projeto foi principalmente praticar Javascript, e também consegui praticar bem o conceito de template engine, visto que aprendi a usar esse tipo de tecnologia recentemente.
+Meu objetivo ao desenvolver este projeto foi principalmente praticar Javascript, e também consegui praticar bem a utilização da template engine, visto que aprendi a usar esse tipo de tecnologia recentemente.
 
 <hr>
 
