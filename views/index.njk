@@ -1,0 +1,23 @@
+{% extends 'layout.njk' %}
+
+{% block content %}
+    </div><!-- FECHANDO O CONTAINER QUE ESTÁ ABERTO NO LAYOUT -->
+    <!-- Modal -->
+    <div class="modal fade" id="modalRegistraDespesa" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div id="cabecalhoModal">
+            <h5 class="modal-title" id="tituloModal"></h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body" id="msgModal">
+          </div>
+          <div class="modal-footer">
+            <button id="botaoModal" type="button" class="btn btn-danger" data-dismiss="modal">Voltar e corrigir</button>
+          </div>
+        </div>
+      </div>
+    </div>
+{% endblock %}
