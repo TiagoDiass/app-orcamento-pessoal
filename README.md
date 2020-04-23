@@ -3,7 +3,8 @@ Essa é uma pequena aplicação web onde o usuário pode registrar suas despesas
 
 ## Tecnologias utilizadas :rocket:
 
-- HTML5, Bootstrap 4 e Javascript puro para execução da lógica de registro, consulta e exclusão de despesas
+- HTML5 e Bootstrap 4 para estruturação e estilização das páginas
+- Javascript puro para execução da lógica de registro, consulta e exclusão de despesas
 - Nunjucks como template engine para poder reaproveitar o mesmo HTML em várias páginas
 - NodeJS e Express para organizar as rotas da aplicação e enviar dados para a template engine renderizar no browser
 - Recurso de Local Storage oferecido pelo Browser para armazenar os dados
