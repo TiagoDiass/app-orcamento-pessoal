@@ -1,22 +1,22 @@
-let avaibleID = (window.localStorage.length) + 1;
+let idDisponivel = (window.localStorage.length) + 1;
 
-function saveToStorage(id, item){
+function salvarNoStorage(id, item){
     window.localStorage.setItem(id, item);
 }
 
-function getFromStorage(id){
+function pegarDoStorage(id){
     let item = window.localStorage.getItem(id);
 
     return item;
 }
 
-function deleteFromStorage(id){
+function deletarDoStorage(id){
     window.localStorage.removeItem(id);
 }
 
 function cadastrarDespesa(){
-    let id = avaibleID;
-    avaibleID++;
+    let id = idDisponivel;
+    idDisponivel++;
 
     let despesa = {
         ano: document.querySelector('#ano').value,
@@ -30,25 +30,21 @@ function cadastrarDespesa(){
     //Variável que usaremos para armazenar o objeto em forma de JSON, para assim o passarmos para o localStorage
     let despesaJson;
 
-    let errorObject = checkError(despesa);
+    let objetoErro = verificarErros(despesa);
     
-    if(errorObject.erro != true){
+    if(objetoErro.erro != true){
         despesaJson = JSON.stringify(despesa);
-        saveToStorage(id, despesaJson);
-        
-        // Modal para mensagem de sucesso
+        salvarNoStorage(id, despesaJson);
         exibirModalSucesso();
         limparCampos();
     }else{
-        avaibleID--;
-        
-        // Modal para mensagem de erro
-        exibirModalErro(errorObject.stringErro); 
+        idDisponivel--;
+        exibirModalErro(objetoErro.stringErro); 
     }   
 }
 
 //Função que usaremos para válidar os campos, e retornaremos um objeto com dois atributos, erro(true ou false) e stringErro, que especificará qual campo está inválido
-function checkError({ ano, mes, dia, tipo, descricao, valor }){
+function verificarErros({ ano, mes, dia, tipo, descricao, valor }){
     let erro = false;
     let stringErro = '';
 
@@ -73,74 +69,9 @@ function checkError({ ano, mes, dia, tipo, descricao, valor }){
     }
 
     return{
-        erro: erro,
-        stringErro: stringErro
+        erro,
+        stringErro
     };
-}
-
-function recuperarTodasDespesas(){
-    let arrayDespesas = new Array();
-    let tabela = document.querySelector('#tableBody');
-    let despesasQtd = window.localStorage.length;
-    
-    for(let i = 1; i <= despesasQtd; i++){
-        //Pegando a despesa no localStorage
-        let despesa = getFromStorage(i);
-        
-        //Convertendo ela de JSON para Objeto
-        despesa = JSON.parse(despesa);
-        let tipoDespesa;
-
-        switch(despesa.tipo){
-            case '1':
-                tipoDespesa = 'Alimentação';
-                break;
-            case '2':
-                tipoDespesa = 'Educação';
-                break;
-            case '3':
-                tipoDespesa = 'Lazer';
-                break;
-            case '4':
-                tipoDespesa = 'Saúde';
-                break;
-            case '5':
-                tipoDespesa = 'Transporte'
-                break;
-        }
-
-        despesa.despesaString = tipoDespesa;
-        despesa.id = i;
-
-        arrayDespesas.push(despesa);
-    
-    }
-
-    return arrayDespesas;
-}
-
-let arrayDespesas = recuperarTodasDespesas();
-
-function renderDespesas(arrayDespesas){
-    document.querySelector('#tableBody').innerHTML = '';
-
-    arrayDespesas.forEach(despesa => {
-        let tabela = document.querySelector('#tableBody')
-        let listItemDespesa = document.createElement('tr');
-    
-        listItemDespesa.innerHTML = `
-            <td>${despesa.dia} / ${despesa.mes} / ${despesa.ano}</td>
-            <td>${despesa.despesaString}</td>
-            <td>${despesa.descricao}</td>
-            <td>R$ ${despesa.valor}</td>
-            <button class="btn btn-danger" style="margin-top: 15%" onclick="deletarDespesa(${despesa.id})">
-                <i class="fas fa-times"></i>
-            </button>
-        `;
-        
-        tabela.appendChild(listItemDespesa);
-
-    })
 }
 
 function exibirModalSucesso(){
@@ -166,14 +97,14 @@ function exibirModalErro(stringErro){
 
     let msgErro = document.getElementById('msgModal');
 
-        if(stringErro == 'descrição'){    
-            msgErro.innerHTML = 'Coloque uma descrição em sua despesa';
-        }else{
-            msgErro.innerHTML = `Escolha um ${stringErro} válido para sua despesa!`;
-        }
+    if(stringErro == 'descrição'){    
+        msgErro.innerHTML = 'Coloque uma descrição em sua despesa';
+    }else{
+        msgErro.innerHTML = `Escolha um ${stringErro} válido para sua despesa!`;
+    }
 
-        let modal = document.getElementById('modalRegistraDespesa');
-        $(modal).modal('show');
+    let modal = document.getElementById('modalRegistraDespesa');
+    $(modal).modal('show');
 }
 
 function limparCampos(){
@@ -183,6 +114,70 @@ function limparCampos(){
     document.getElementById('tipo').value = '0';
     document.getElementById('descricao').value = '';
     document.getElementById('valor').value = '';
+}
+
+function recuperarTodasDespesas(){
+    let arrayDespesas = new Array();
+    let tabela = document.querySelector('#tableBody');
+    let qtdDespesas = window.localStorage.length;
+    
+    for(let i = 1; i <= qtdDespesas; i++){
+        //Pegando a despesa no localStorage
+        let despesa = pegarDoStorage(i);
+        
+        //Convertendo ela de JSON para Objeto
+        despesa = JSON.parse(despesa);
+        let tipoDespesa;
+
+        switch(despesa.tipo){
+            case '1':
+                tipoDespesa = 'Alimentação';
+                break;
+            case '2':
+                tipoDespesa = 'Educação';
+                break;
+            case '3':
+                tipoDespesa = 'Lazer';
+                break;
+            case '4':
+                tipoDespesa = 'Saúde';
+                break;
+            case '5':
+                tipoDespesa = 'Transporte'
+                break;
+        }
+
+        despesa.tipoDespesaString = tipoDespesa;
+        despesa.id = i;
+
+        arrayDespesas.push(despesa);
+    }
+
+    return arrayDespesas;
+}
+
+let arrayDespesas = recuperarTodasDespesas();
+
+function renderDespesas(arrayDespesas){
+    document.querySelector('#tableBody').innerHTML = '';
+
+    arrayDespesas.forEach(despesa => {
+        let tabela = document.querySelector('#tableBody')
+        let listItemDespesa = document.createElement('tr');
+    
+        listItemDespesa.innerHTML = `
+            <td>${despesa.dia} / ${despesa.mes} / ${despesa.ano}</td>
+            <td>${despesa.tipoDespesaString}</td>
+            <td>${despesa.descricao}</td>
+            <td>R$ ${despesa.valor}</td>
+            <button class="btn btn-danger" style="margin-top: 15%" onclick="deletarDespesa(${despesa.id})">
+                <i class="fas fa-times"></i>
+            </button>
+        `;
+        
+        tabela.appendChild(listItemDespesa);
+
+    })
 }
 
 function consultarDespesa(){
@@ -260,16 +255,15 @@ function deletarDespesa(id){
     
     let tamanhoDoStorage = window.localStorage.length;
     
-    deleteFromStorage(id);
+    deletarDoStorage(id);
 
     for(let i = id+1; i <= tamanhoDoStorage; i++){
         //Organizando o localStorage, alterando o ID dos outros registros
-        let item = getFromStorage(i);
-        deleteFromStorage(i);
-        saveToStorage(i-1, item);
+        let item = pegarDoStorage(i);
+        deletarDoStorage(i);
+        salvarNoStorage(i-1, item);
     }
 
     let novoArrayDespesas = recuperarTodasDespesas();    
     renderDespesas(novoArrayDespesas);
-
 }
